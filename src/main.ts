@@ -12,13 +12,13 @@ console.log(username);
 
 // to fix this:
 
-let a: number = 12
-let b: number = 6
-let c: number = 2
+//let a: number = 12
+//let b: number = 6
+//let c: number = 2
 
 //remember to set noEmitOnError to true so that when the compiler doesn't like something it doesn't still put the error out.
 
-console.log(c*b)
+// console.log(c*b)
 
 /*
 Typescript is a strongly typed language. TS is a statically typed language which means types are checked at compile time. JavaScript conversely is a dynamically typed language. This means types are checked at run time.
@@ -208,3 +208,76 @@ number => {
 
 logMsg(addAll(2, 3, 2)) //should return 7
 logMsg(addAll(2, 3)) //should return 2
+
+// Rest Parameters:
+// however, many numbers you want to add you can, can also have required by writing (a: number, ...nums: number[])
+const total = (...nums: number[]): number => {
+    return nums.reduce((prev, curr) => prev + curr)
+}
+
+logMsg(total(1, 2, 3, 4))
+
+// The Never Type:
+// this is where you use it to throw an error and thats the only time you want to save, if data type is never like in infinite then you can use it as a debugging tool.
+const createError = (errMsg: string): never => {
+    throw new Error(errMsg)
+}
+
+// const infinite = () => {
+//     let i: number = 1
+//     while(true){
+//         i++
+//     }
+// }
+
+
+//custom type guard
+const isNumber = (value: any): boolean => {
+    return typeof value === 'number'
+        ? true: false
+}
+
+//cannot have empty returns in typescript.
+// use of the never type
+const numberOrString = (value: number | string): string => {
+    if(typeof value === 'string') return 'string'
+    if(isNumber(value)) return 'string'
+    return createError('this should never happen!')
+}
+
+
+// Chapter 5: Assertions (same as casting)
+// telling the typescript compiler that you know more about the types comes in handy when using DOM
+
+type One = string
+type Two = string | number
+type Three = 'hello'
+
+//convert to more or less specific type than you started with:
+
+let a: One = 'hello'
+let b = a as Two //assignment to less specific type
+let c = a as Three //more specific here
+
+let d = <One> 'world'
+let e = <string | number>'world'
+
+const addOrConcat = (a: number, b: number, c: 'add' | 'concat'): number | string
+
+//use alt z to wrap stuff onto the next line.
+
+//let myVal: string = addOrConcat(2, 2, 'concat') as string
+
+// the as is what you use to do assertions.
+
+//10 as string //this doesn't work as it checks you but it doesn't always work and it can do it by converting it to unknown first: (forced casting or double casting)
+// 10 as unknown as string
+
+// the DOM
+// const img = document.querySelector('img')! // the ! is a non null assertion.
+// const myImg = document.getElementById('#img') as HTMLImageElement 
+// img.src //this doesn't work as object is possibly null so now we need to add the assertion to the img
+// img.src
+// myImg.src
+
+//Chapter 6 Classes
