@@ -465,3 +465,37 @@ const logStudentKey = (student: Student, key: keyof Student): void => {
 logStudentKey(student, 'name')
 
 //chapter 8: Generics
+
+const echo = <T>(arg: T): T => arg //what does <.....> do??
+// the above statement works with any type. Useful with utility functions
+
+const isObj = <T>(arg: T): boolean => {
+    return (typeof arg === 'object' && !Array.isArray(arg) && arg !== null)
+}
+
+const isTrue = <T>(arg: T): {arg: T, is: boolean } => {
+    if (Array.isArray(arg) && !arg.length) {
+        return { arg, is: false}
+    }
+    if(isObj(arg) && !Object.keys(arg as keyof T).length) {
+        return { arg, is: false}
+    }
+    return { arg, is: !!arg} //!! -> double bang operator makes it true or false not 0 or 1.
+}
+
+interface HasID {
+    id: number
+}
+
+const processUser = <T extends HasID>(user: T): T => {
+    //process the user with logic here
+    return user
+}
+
+console.log(processUser({ id: 1, name: 'Dave'})) //but if you were to remove the idea type then there would be an error as T extends HasID exists.
+
+const getUsersProperty = <T extends HasID, K extends keyof T>(users: T[], key: K): T[K][] => {
+    return users.map(user => user[key])
+}
+
+//Chapter 9: Utility Types:
