@@ -281,3 +281,187 @@ const addOrConcat = (a: number, b: number, c: 'add' | 'concat'): number | string
 // myImg.src
 
 //Chapter 6 Classes
+class Coder {
+    secondLang!: string //assertion (!) means that you know what you are doing but you are not going to deal with it in the future.
+    music: String
+    age: number
+    lang: String
+    constructor(public readonly name: string, music: string, age: number, lang: string = 'Typescript') { //public makes it a more global variable within the class. so you do not need to write name twice. Readonly means it cannot be changed. private makes it only changeable within the class. protected means something else. DEfault values also available meaning you do not need to write it in when declaring.
+        this.name = name
+        this.music = music
+        this.age = age
+        this.lang = lang
+
+    }
+    public getAge() {
+        return `Hello, I'm ${this.age}!`
+    }
+}
+
+const Dave = new Coder('Dave', 'Rock', 42)
+console.log(Dave.getAge)
+// console.log(Dave.age)
+
+class webDev extends Coder {
+    constructor(
+        public computer: string,
+        name: string,
+        music: string,
+        age: number,
+    ) {
+        super(name, music, age) {
+            this.computer = computer
+        }
+    }
+
+    public getLang() {
+        return `I write ${this.lang}`
+    }
+}
+
+const Sara = new webDev('Mac', 'Sara', 'Lofi', 25)
+
+// console.log(Sara.getLang())
+// console.log(Sara.age) //age is still private here only accessible within the class
+
+
+interface Musician {
+    name: string,
+    instrument: string,
+    play(action: string): string
+}
+
+
+class Bassist implements Musician {
+    name: string
+    instrument: string
+    constructor(name: string, instrument: String) {
+        this.name = name
+        this.instrument = instrument
+    }
+    play(action: string) {
+        return `${this.name} ${action} the ${this.instrument}`
+    }
+}
+
+
+const Page = new Bassist('Jimmy', 'Guitar')
+console.log(Page.play('strums'))
+
+
+class Peeps {
+    static count: number = 0
+    static getCount(): number {
+        return Peeps.count
+    }
+
+    public id: number
+    constructor(public name: string) {
+        this.name = name
+        this.id = ++Peeps.count
+    }
+}
+
+const John = new Peeps('John')
+const Steve = new Peeps('Steve')
+const Amy = new Peeps ('Amy')
+
+console.log(Amy.id)
+
+
+//the static keyword applies directly to the class not with the object that it applied to the class
+
+//Getters and Setters:
+
+class Bands {
+    private dataState: string[]
+    constructor() {
+        this.dataState = []
+    }
+
+    public get data(): string[] { //Getter
+        return this.dataState
+    }
+
+    public set data(value: string[]) { //setter
+        if (Array.isArray(value) && value.every(el => typeof el === 'string')) {//every checks every element in an array.
+            this.dataState = value
+            return
+        } else throw new Error('Param is not an array of strings') 
+    }
+}
+
+const MyBands = new Bands()
+MyBands.data = ['Neil Young', 'Led Zep']
+console.log(MyBands.data)
+MyBands.data = [...MyBands.data, 'ZZ Top']
+console.log(MyBands.data)
+//MyBands.data = ['Van Halen', 5150] //this does not work
+
+
+
+// Chapter 7: Index Signatures and keyof assertions:
+
+
+//Index signatures:
+
+
+interface TransactionObj {
+    Pizza: number,
+    Books: number,
+    Job: number
+}
+
+const todaysTransactions: TransactionObj = {
+    Pizza: -10,
+    Books: -5,
+    Job: 50
+}
+
+console.log(todaysTransactions.Pizza)
+console.log(todaysTransactions['Pizza'])
+
+let porp: string = 'Pizza'
+console.log(todaysTransactions[prop])// this is how we would access it dynamically but typescript does not like this.
+
+
+//declares all the keys will be strings and values will be numbers.
+interface TransactionObj {
+    [index: string]: number
+}
+
+
+
+///////////////////////////
+
+
+interface Student {
+    [key: String]: string | number | number[] | undefined,
+    name: string,
+    GPA: number,
+    classes?: number[]
+}
+
+const student: Student = {
+    name: "Doug",
+    GPA: 3.5,
+    classes: [100, 200]
+}
+
+// console.log(student.test)
+
+for (const key in student) {
+    console.log(`${key}: ${student[key as keyof Student]}`)
+}
+
+Object.keys(student).map(key => {
+    console.log(student[key as keyof typeof student])
+})
+
+const logStudentKey = (student: Student, key: keyof Student): void => {
+    console.log(`student ${key}: ${student[key]}`)
+}
+
+logStudentKey(student, 'name')
+
+//chapter 8: Generics
