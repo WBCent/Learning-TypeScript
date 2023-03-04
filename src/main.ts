@@ -150,3 +150,61 @@ enum Grade {
 }
 
 console.log(Grade.U) //this will show 0 throught 4. you can change U =1 to change A to 5 (increments by 1)
+
+
+//TYpe aliases is what we are discussing now:
+
+type stringOrNumber = string | number;
+
+type stringOrNumberArray = (string | number)[];
+
+//so we can create the following
+type userId = stringOrNumber;
+
+//representing our typescript types with a different name.
+
+// Literal types
+let Name: 'Dave'
+
+let userName: 'Dave' | 'JOhn' | 'Amy'
+userName = "Amy" //won't take in any other name other than declared in the line above.
+
+//functions
+const add = (a: number, b: number): number => {
+    return a + b
+}
+
+const logMsg = (message: any): void => {
+    console.log(message)
+}
+
+//Any no return function should have a void return the : datatype after the brackets specifies the type of data being returned.
+
+let subtract = function (c: number, d: number):
+number { //number is the return type here.
+    return c - d
+}
+
+//this is a math function type and an example of using it
+type Mathfunction = (a: number, b: number) => number
+
+let multiply: Mathfunction = function (c, d) {
+    return c * d
+}
+
+logMsg(multiply(2, 3))
+
+//Optional Parameters
+const addAll = (a: number, b: number, c?: number):
+number => {
+    if (typeof c !== 'undefined') {
+        return a + b + c //need to put in a typeguard to protect c from being undefined=
+    }
+    return a + b
+}
+
+//Optional parameters need to come last in the list note that required parameters come first.
+//Can have default values as well they work the same.
+
+logMsg(addAll(2, 3, 2)) //should return 7
+logMsg(addAll(2, 3)) //should return 2
